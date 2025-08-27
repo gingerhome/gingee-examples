@@ -1,0 +1,15 @@
+{
+    "permissions": {
+        "mandatory": [
+            "cache",
+            "db",
+            "fs"
+        ],
+        "optional": [
+            "httpclient",
+            "pdf",
+            "zip",
+            "image"
+        ]
+    }
+}

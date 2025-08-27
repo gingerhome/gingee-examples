@@ -1,0 +1,19 @@
+{
+    "routes": [
+        {
+            "path": "/users",
+            "method": "GET",
+            "script": "routes/users/list.js"
+        },
+        {
+            "path": "/users/:userId",
+            "method": "GET",
+            "script": "routes/users/get.js"
+        },
+        {
+            "path": "/users/:userId/posts/:postId",
+            "method": "GET",
+            "script": "routes/posts/get.js"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "packager": "gingerjs-packager",
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "box/logs/**",
+    "box/.gpkg",
+    "box/temp/**",
+    "box/zip_source/**",
+    "box/zipsource/**",
+    "box/zip_unpacked_default/**",
+    "box/zip_unpacked_with_root/**",
+    "box/data/**",
+    "generated/**"
+  ]
+}

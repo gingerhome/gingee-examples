@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cookies with Ginger</title>
+    <script>
+        var serverCookie = '{{SERVER_COOKIE}}';
+        const getCookieValue = (name) => (
+            document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
+        );
+
+        window.onload = function(){
+            var jsCookie = getCookieValue('jscookie');
+            var httpCookie = getCookieValue('httpcookie');
+            var out = document.getElementById('out');
+            out.innerHTML = "<p>JSCookie (should be able to get): <br>" + jsCookie + "</p>";
+            out.innerHTML += "<p>HTTPCookie (should be empty to client js): <br>" + httpCookie + "</p>";
+            out.innerHTML += "<p>ServerCookie (should have both cookies readable at server side): <br>" + serverCookie + "</p>";
+        }
+    </script>
+</head>
+<body>
+    <div id="out"></div>
+</body>
+</html>

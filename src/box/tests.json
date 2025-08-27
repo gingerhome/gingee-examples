@@ -1,0 +1,315 @@
+[
+  {
+    "id": "simple",
+    "name": "1. Simple: Hello World",
+    "description": "Tests a basic server script that returns a plain text response. This is the simplest possible GingerJS endpoint.",
+    "endpoint": "/tests/simple",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "text"
+  },
+  {
+    "id": "jsonresp",
+    "name": "2. Simple: JSON Response",
+    "description": "Tests a basic server script that returns a JSON object.",
+    "endpoint": "/tests/jsonresp",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "binary-resp",
+    "name": "3. Simple: Binary Response",
+    "description": "Tests sending a direct binary (image/png) response from a server script.",
+    "endpoint": "/tests/binary-resp",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "image"
+  },
+  {
+    "id": "get-query-params",
+    "name": "4. Request: GET with Query",
+    "description": "Tests passing query parameters to a GET request. The script will echo back the parsed query object.",
+    "endpoint": "/tests/get-query-params",
+    "method": "GET",
+    "inputs": [
+      { "name": "framework", "label": "Framework", "type": "text", "defaultValue": "GingerJS" },
+      { "name": "version", "label": "Version", "type": "text", "defaultValue": "1.0.0" }
+    ],
+    "resultTarget": "json"
+  },
+  {
+    "id": "dynamic-route",
+    "name": "5. Request: Dynamic Route",
+    "description": "Tests manifest-based routing with dynamic URL parameters (/users/:userId).",
+    "endpoint": "/tests/users/:userId",
+    "method": "GET",
+    "inputs": [
+      { "name": "userId", "label": "User ID", "type": "text", "defaultValue": "42" }
+    ],
+    "resultTarget": "json"
+  },
+  {
+    "id": "post-json",
+    "name": "6. Request: POST JSON Body",
+    "description": "Tests sending a JSON object in the request body. The server will parse and echo it back.",
+    "endpoint": "/tests/post-json",
+    "method": "POST",
+    "postBodyType": "json",
+    "inputs": [
+      { "name": "jsonData", "label": "JSON Body", "type": "textarea", "defaultValue": "{\n  \"user\": \"alex\",\n  \"role\": \"admin\"\n}" }
+    ],
+    "resultTarget": "json"
+  },
+  {
+    "id": "post-form",
+    "name": "7. Request: POST Form Body",
+    "description": "Tests sending data as 'application/x-www-form-urlencoded'. The server will parse and echo it back.",
+    "endpoint": "/tests/post-form-url-encoded",
+    "method": "POST",
+    "postBodyType": "form-urlencoded",
+    "inputs": [
+      { "name": "username", "label": "Username", "type": "text", "defaultValue": "ginger_user" },
+      { "name": "apiKey", "label": "API Key", "type": "text", "defaultValue": "abc-123-xyz-789" }
+    ],
+    "resultTarget": "json"
+  },
+  {
+    "id": "post-multipart",
+    "name": "8. Request: POST Multipart Form",
+    "description": "Tests a multipart/form-data request, including a file upload. The server will echo back info about the fields and the uploaded file.",
+    "endpoint": "/tests/post-multipart",
+    "method": "POST",
+    "postBodyType": "multipart",
+    "inputs": [
+      { "name": "description", "label": "File Description", "type": "text", "defaultValue": "This is a test file." },
+      { "name": "uploadFile", "label": "Upload a File", "type": "file" }
+    ],
+    "resultTarget": "json"
+  },
+  {
+    "id": "cookies",
+    "name": "9. Context: Cookies",
+    "description": "Tests reading and setting cookies. This test will display the cookies it received from your browser and set new cookies in the response.",
+    "endpoint": "/tests/cookies",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "iframe"
+  },
+  {
+    "id": "appcfg",
+    "name": "10. Context: $g.app",
+    "description": "Tests the '$g.app' context object by returning its contents.",
+    "endpoint": "/tests/appcfg",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "sandbox",
+    "name": "11. Sandbox: Security",
+    "description": "Tests the security of the 'gbox' sandbox by attempting to access forbidden modules and globals. All tests should pass.",
+    "endpoint": "/tests/test-sandbox",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "libcall",
+    "name": "12. Sandbox: Local Libs",
+    "description": "Tests the sandboxed `require()` of a local library from within the app's box.",
+    "endpoint": "/tests/lib-call",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "text"
+  },
+  {
+    "id": "externallibcall",
+    "name": "13. Sandbox: External Libs",
+    "description": "Tests the sandboxed execution of various UMD-formatted external libraries.",
+    "endpoint": "/tests/externallibcall",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "cache",
+    "name": "14. Module: Cache",
+    "description": "Performs a full set, get, delete, and clear cycle on the app's namespaced cache.",
+    "endpoint": "/tests/cache",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "text"
+  },
+  {
+    "id": "chart",
+    "name": "15. Module: Chart",
+    "description": "Tests the 'chart' module by generating a PNG bar chart on the server.",
+    "endpoint": "/tests/chart",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "image"
+  },
+  {
+    "id": "crypto",
+    "name": "16. Module: Crypto",
+    "description": "Runs a comprehensive test of the 'crypto' module, including hashing, HMAC, encryption/decryption, and password functions.",
+    "endpoint": "/tests/crypto",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "dashboard",
+    "name": "17. Module: Dashboard",
+    "description": "Tests the 'dashboard' module by composing three different charts into a single PNG image.",
+    "endpoint": "/tests/dashboard",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "image"
+  },
+  {
+    "id": "db-postgres",
+    "name": "18. Module: DB (PostgreSQL)",
+    "description": "Performs a full CRUD and transaction rollback test against a PostgreSQL database.",
+    "endpoint": "/tests/db-postgres",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "db-sqlite",
+    "name": "19. Module: DB (SQLite)",
+    "description": "Performs a full CRUD and transaction rollback test against a SQLite database file.",
+    "endpoint": "/tests/db-sqlite",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "encode",
+    "name": "20. Module: Encode",
+    "description": "Tests all encoding and decoding functions (Base64, URI, Hex, HTML).",
+    "endpoint": "/tests/encode",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "fileio",
+    "name": "21. Module: File I/O",
+    "description": "Performs a full async and sync lifecycle test (Write, Read, Copy, Move, Delete) on a single file.",
+    "endpoint": "/tests/fileio",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "folderio",
+    "name": "22. Module: Folder I/O",
+    "description": "Performs a full async and sync lifecycle test (MkDir, Copy, Move, RmDir) on a directory structure.",
+    "endpoint": "/tests/folderio",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "html",
+    "name": "23. Module: HTML Parser",
+    "description": "Tests the 'html' module by parsing from a string, a local file, and scraping a live website.",
+    "endpoint": "/tests/html",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "httpclient",
+    "name": "24. Module: HTTP Client",
+    "description": "Tests the 'httpclient' module by making several live requests to an external API (httpbun.com).",
+    "endpoint": "/tests/httpclient",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "image",
+    "name": "25. Module: Image",
+    "description": "Tests the 'image' module by loading a source image, applying transformations, and returning the result.",
+    "endpoint": "/tests/image",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "iframe"
+  },
+  {
+    "id": "jwt",
+    "name": "26. Module: JWT",
+    "description": "Tests the 'auth.jwt' functions for creating and verifying a JSON Web Token.",
+    "endpoint": "/tests/jwt",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "pdf",
+    "name": "27. Module: PDF",
+    "description": "Tests the 'pdf' module by generating a PDF with an embedded chart.",
+    "endpoint": "/tests/pdf",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "iframe"
+  },
+  {
+    "id": "pdf-custom-font",
+    "name": "28. Module: PDF (Custom Font)",
+    "description": "Tests PDF generation using a custom font ('Playfair Display') loaded from the app's box.",
+    "endpoint": "/tests/pdf-custom-font",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "iframe"
+  },
+  {
+    "id": "qrcode",
+    "name": "29. Module: QR/Barcode",
+    "description": "Tests the generation of both a QR code and a 1D barcode.",
+    "endpoint": "/tests/qrcode",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "iframe"
+  },
+  {
+    "id": "rnd",
+    "name": "30. Module: RND Utilities",
+    "description": "Tests the 'rnd' utility namespace for generating random data.",
+    "endpoint": "/tests/rnd",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "utils",
+    "name": "31. Module: Utils",
+    "description": "Tests the 'string', 'validate', and 'misc' utility namespaces.",
+    "endpoint": "/tests/utils",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "uuid",
+    "name": "32. Module: UUID",
+    "description": "Tests the generation and validation of v4 UUIDs.",
+    "endpoint": "/tests/uuid",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  },
+  {
+    "id": "zip",
+    "name": "33. Module: Zip",
+    "description": "Performs a full lifecycle test of the 'zip' module, including creating and unzipping archives.",
+    "endpoint": "/tests/zip",
+    "method": "GET",
+    "inputs": [],
+    "resultTarget": "json"
+  }
+]
