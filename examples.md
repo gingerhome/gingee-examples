@@ -18,8 +18,8 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 | | [Reading Cookies](#reading-cookies) | Reading cookies from a request |
 | | [Reading App Meta](#reading-app-meta) | Reading meta info of the app from a request |
 | **Using Modules** | | |
-| | [App specific modules](#using-app-specific-modules) | Tests the sandboxed `require()` of a local library |
-| | [External modules](#external-modules) | Tests the sandboxed execution of various UMD-formatted external libraries |
+| | [App specific modules](#using-app-specfic-modules) | Tests the sandboxed `require()` of a local library |
+| | [External modules](#using-external-modules) | Tests the sandboxed execution of various UMD-formatted external libraries |
 
 ---
 
