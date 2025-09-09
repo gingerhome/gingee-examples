@@ -20,6 +20,11 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 | **Using Modules** | | |
 | | [App specific modules](#using-app-specfic-modules) | Tests the sandboxed `require()` of a local library |
 | | [External modules](#using-external-modules) | Tests the sandboxed execution of various UMD-formatted external libraries |
+| **GingerJS Modules** | | |
+| | [Cache](#cache) | Performs a full set, get, delete, and clear cycle on the app's namespaced cache. |
+| | [Chart](#chart) | Tests the 'chart' module by generating a PNG bar chart on the server. |
+| | [Crypto](#crypto) | Runs a comprehensive test of the 'crypto' module, including hashing, HMAC, encryption/decryption, and password functions. |
+
 
 ---
 
@@ -28,7 +33,7 @@ Tests a basic server script that returns a plain text response. This is the simp
 
 ```javascript
 module.exports = async function() {
-    ginger(async function($g) {
+    await ginger(async function($g) {
         $g.response.send("Hello, World!");
     });
 };
@@ -39,7 +44,7 @@ Tests a basic server script that returns a JSON object.
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         $g.response.send({ message: "Hello world!" });
     });
 };
@@ -50,7 +55,7 @@ Tests sending a direct binary (image/png) response from a server script.
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         const fs = require('fs');
         const mimeTypes = require('mime-types');
 
@@ -69,7 +74,7 @@ Tests passing query parameters to a GET request. The script will echo back the p
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         var resp = {
             code: 200,
             query: $g.request.query
@@ -97,7 +102,7 @@ Tests sending a JSON object in the request body. The script will parse and echo 
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         var resp = {
             code: 200,
             body: $g.request.body
@@ -113,7 +118,7 @@ Tests posting body data as 'application/x-www-form-urlencoded'. The script will 
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         var resp = {
             code: 200,
             body: $g.request.body
@@ -129,7 +134,7 @@ Tests a multipart/form-data request, including a file upload. The script will pa
 
 ```javascript
 module.exports = async function () {
-    ginger(function ($g) {
+    await ginger(function ($g) {
         if ($g.request.body && $g.request.body.files) {
             var fileFields = Object.keys($g.request.body.files);
             fileFields.forEach(fileField => {
@@ -153,7 +158,7 @@ Tests reading and setting cookies. This test will display the cookies it receive
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         var fs = require('fs');
         
         var htmlContent = fs.readFileSync(fs.BOX, 'assets/testcookies.html');
@@ -178,7 +183,7 @@ Tests the '$g.app' context object by returning its contents.
 
 ```javascript
 module.exports = function() {
-    ginger(async function($g) {
+    await ginger(async function($g) {
         $g.response.send($g.app);
     });
 };
@@ -190,7 +195,7 @@ Tests the sandboxed `require()` of a local library
 
 ```javascript
 module.exports = async function() {
-    ginger(function($g) {
+    await ginger(function($g) {
         const {add} = require('./libs/sample-lib.js');
         $g.response.send("Lib call result: " + add(5, 10));
     });
@@ -202,7 +207,7 @@ Tests the sandboxed execution of various UMD-formatted external libraries
 
 ```javascript
 module.exports = function () {
-    ginger(async function ($g) {
+    await ginger(async function ($g) {
         const tinycolor = require('./libs/external/tinycolor.min.js');  //https://github.com/bgrins/TinyColor
         const mathjs = require('./libs/external/math.min.js');  //https://mathjs.org/
         const lodash = require('./libs/external/lodash.min.js');  //https://lodash.com/
@@ -293,6 +298,201 @@ module.exports = function () {
         };
 
         $g.response.send(responseObject);
+    });
+};
+```
+
+## Cache
+Performs a full set, get, delete, and clear cycle on the app's namespaced cache.
+
+```javascript
+module.exports = async function() {
+    ginger(async ($g) => {
+        const cache = require('cache');
+
+        const results = [];
+        //1. Test cache set operation
+        await cache.set('secret_key', { message: 'This is from GingerJS tests app' });
+        results.push('1. PASS: Cache set operation successful for key "secret_key"');
+
+        //2. Test cache get operation
+        const value = await cache.get('secret_key');
+        if (value) {
+            results.push(`2. PASS: Cache get operation successful for key "secret_key", value: ${JSON.stringify(value)}`);
+        } else {
+            results.push('2. FAIL: Cache get operation failed for key "secret_key", message: Key not found');
+        }
+
+        //3. Test cache del operation
+        await cache.del('secret_key');
+        results.push({ status: 'ok', key_del: 'secret_key' });
+
+        //3.5 Test cache get after delete
+        const deletedValue = await cache.get('secret_key');
+        if (deletedValue) {
+            results.push(`3.5. FAIL: Cache get operation should have failed for key "secret_key" after deletion, but succeeded with value: ${JSON.stringify(deletedValue)}`);
+        } else {
+            results.push('3.5. PASS: Cache get operation failed for key "secret_key" after deletion, as expected');
+        }
+
+        //4. Test cache clear operation
+        await cache.clear();
+        results.push('4. PASS: Cache clear operation successful');
+
+        //4.5 Test cache get after clear
+        const clearedValue = await cache.get('secret_key');
+        if (clearedValue) {
+            results.push(`4.5. FAIL: Cache get operation should have failed for key "secret_key" after clear, but succeeded with value: ${JSON.stringify(clearedValue)}`);
+        } else {
+            results.push('4.5. PASS: Cache get operation failed for key "secret_key" after clear, as expected');
+        }
+
+        $g.response.send(results.join('\n'));
+    });
+};
+```
+
+## Chart
+Tests the 'chart' module by generating a PNG bar chart on the server
+
+```javascript
+module.exports = async function () {
+    ginger(async ($g) => {
+        const chart = require('chart');
+
+        try {
+            // 1. Define a standard Chart.js configuration object.
+            const chartConfig = {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sample Bar Chart'
+                        }
+                    }
+                }
+            };
+
+            // 2. Render the chart to a buffer.
+            const imageBuffer = await chart.render(chartConfig, {
+                width: 800,
+                height: 450,
+                output: chart.BUFFER
+            });
+
+            // 3. Send the image back as the response.
+            $g.response.send(imageBuffer, 200, 'image/png');
+
+        } catch (err) {
+            $g.log.error('Error in chart_test script:', { error: err.message, stack: err.stack });
+            $g.response.send({ error: 'Internal Server Error', message: err.message }, 500);
+        }
+    });
+};
+```
+
+## Crypto
+Runs a comprehensive test of the 'crypto' module, including hashing, HMAC, encryption/decryption, and password functions.
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const crypto = require('crypto');
+
+        const input = "hello world";
+        const secret = "my-super-secret-key";
+        const userPassword = "Password123!";
+
+        const crc32Result = crypto.CRC32(input);
+        const md5Result = crypto.MD5(input);
+        const sha2Result = crypto.SHA2(input);
+        const sha3Result = crypto.SHA3(input);
+
+        const hmacSignature = crypto.hmacSha256Encrypt(input, secret);
+        const isSignatureValid = crypto.hmacSha256Verify(hmacSignature, input, secret);
+        const isSignatureInvalid = crypto.hmacSha256Verify(hmacSignature, "hello world!", secret); // Different input
+
+        const secretMessage = "This is a secret message for user 42.";
+        const encryptedData = crypto.encrypt(secretMessage, secret);
+        const decryptedMessage = crypto.decrypt(encryptedData, secret);
+        const failedDecryption = crypto.decrypt(encryptedData, "wrong-secret");
+
+        const passwordHash = await crypto.hashPassword(userPassword);
+        const isPasswordCorrect = await crypto.verifyPassword(userPassword, passwordHash);
+        const isPasswordIncorrect = await crypto.verifyPassword("wrong_password", passwordHash);
+
+        const apiKey = crypto.generateSecureRandomString(32);
+        const sessionId = crypto.generateSecureRandomString(24);
+        const withoutNumbers = crypto.generateSecureRandomString(24, true);
+
+        const responseData = {
+            inputString: input,
+            hashes: {
+                crc32: crc32Result,
+                md5: md5Result,
+                sha256: sha2Result,
+                sha3_256: sha3Result,
+            },
+            hmac: {
+                secretKey: "hidden-for-security",
+                signature: hmacSignature,
+                verification: {
+                    "check_with_correct_data": isSignatureValid, // Should be true
+                    "check_with_incorrect_data": isSignatureInvalid, // Should be false
+                }
+            },
+            encryption: {
+                original_message: secretMessage,
+                encrypted_package: encryptedData,
+                decrypted_message: decryptedMessage,
+                failed_decryption_result: failedDecryption // Should be null
+            },
+            random_strings: {
+                generated_api_key: apiKey,
+                generated_session_id: sessionId,
+                without_numbers: withoutNumbers
+            },
+            password: {
+                original: userPassword,
+                hash: passwordHash,
+                verification: {
+                    correct_password_check: isPasswordCorrect, // Should be true
+                    incorrect_password_check: isPasswordIncorrect // Should be false
+                }
+            }
+        };
+
+        $g.response.send(responseData);
     });
 };
 ```
