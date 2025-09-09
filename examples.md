@@ -11,6 +11,7 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 | **Payload Handling** | | |
 | | [GET with Query](#get-with-query) | Reading query parameters in a GET request |
 | | [Dynamic Route](#dynamic-route) | Reading parameters in a dynamic route request |
+| | [POST JSON Body](#post-json-body) | Reading JSON body in a POST request |
 
 ---
 
@@ -79,6 +80,22 @@ module.exports = async function () {
     await ginger(async ($g) => {
         const userId = $g.request.params.userId;
         $g.response.send({ message: `DYNAMIC ROUTE TEST: Details for user ID: ${userId}` });
+    });
+};
+```
+
+## POST JSON Body
+Tests sending a JSON object in the request body. The script will parse and echo it back.
+
+```javascript
+module.exports = async function() {
+    ginger(function($g) {
+        var resp = {
+            code: 200,
+            body: $g.request.body
+        };
+
+        $g.response.send(resp, 200, 'application/json');
     });
 };
 ```
