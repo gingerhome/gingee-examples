@@ -25,11 +25,17 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 | | [Chart](#chart) | Tests the 'chart' module by generating a PNG bar chart on the server. |
 | | [Crypto](#crypto) | Runs a comprehensive test of the 'crypto' module, including hashing, HMAC, encryption/decryption, and password functions. |
 | | [Dashboard](#dashboard) | Tests the 'dashboard' module by composing three different charts into a single PNG image. |
-| | [DB - PostgreSQL](#db-postgresql) | Performs a full CRUD and transaction rollback test against a PostgreSQL database. |
+| | [DB - PostgreSQL](#db---postgresql) | Performs a full CRUD and transaction rollback test against a PostgreSQL database. |
 | | [DB - SQLite](#db---sqlite) | Performs a full CRUD and transaction rollback test against a SQLite database file. |
 | | [Encode](#encode) | Tests all encoding and decoding functions (Base64, URI, Hex, HTML). |
 | | [File IO](#file-io) | Performs a full async and sync lifecycle test (Write, Read, Copy, Move, Delete) on a single file. |
 | | [Folder IO](#folder-io) | Performs a full async and sync lifecycle test (MkDir, Copy, Move, RmDir) on a directory structure. |
+| | [HTML Parser](#html-parser) | Tests the 'html' module by parsing from a string, a local file, and scraping a live website. |
+| | [HTTP Client](#http-client) | Tests the 'httpclient' module by making several live requests to an external API (httpbun.com). |
+| | [Image](#image) | Tests the 'image' module by loading a source image, applying transformations, and returning the result. |
+| | [JWT](#jwt) | Tests the 'auth.jwt' functions for creating and verifying a JSON Web Token. |
+| | [PDF](#pdf) | Tests the 'pdf' module by generating a PDF with an embedded chart. |
+| | [QR / Barcode](#qr-and-barcode) | Tests the generation of both a QR code and a 1D barcode. |
 
 
 ---
@@ -1150,6 +1156,333 @@ module.exports = async function () {
             async_folder_lifecycle_events: results,
             sync_folder_lifecycle_events: syncResults
         });
+    });
+};
+```
+
+## HTML Parser
+Tests the 'html' module by parsing from a string, a local file, and scraping a live website
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const fs = require('fs');
+        const html = require('html');
+
+        const results = {};
+
+        // --- 1. Test fromString ---
+        const htmlString = `
+        <div>
+            <h2 class="title">Title from String</h2>
+            <p>Some paragraph text.</p>
+        </div>
+        `;
+        const $fromString = html.fromString(htmlString);
+        results.from_string_test = {
+            title: $fromString('.title').text()
+        };
+
+        // --- 2. Test fromFile (Async) ---
+        const $fromFile = await html.fromFile(fs.BOX, './assets/testselect.html');
+        results.from_file_test = {
+            h1_text: $fromFile('h1').text(),
+            first_li_text: $fromFile('#item-1').text()
+        };
+
+        // --- 3. Test fromUrl (Async) ---
+        // We will scrape a real, simple HTML page from the web.
+        const $fromUrl = await html.fromUrl('https://info.cern.ch/hypertext/WWW/TheProject.html');
+        // This page has a <header> element with a <title> inside it.
+        const pageTitle = $fromUrl('header title').text();
+        results.from_url_test = {
+            scraped_url: 'https://info.cern.ch/hypertext/WWW/TheProject.html',
+            page_title: pageTitle
+        };
+
+        $g.response.send(results);
+    });
+};
+```
+
+## HTTP Client
+Tests the 'httpclient' module by making several live requests to an external API (httpbun.com)
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const httpclient = require('httpclient');
+        const formdata = require('formdata');
+        const fs = require('fs');
+
+        const results = {};
+
+        // --- 1. GET Request Test ---
+        // httpbun.com/get echoes back information about the GET request.
+        const getResponse = await httpclient.get('https://httpbun.com/get?test=123');
+        results.get_test = JSON.parse(getResponse.body);
+
+        // --- 2. POST JSON Test ---
+        const jsonData = { name: "test", value: 42, isCool: true };
+        const postJsonResponse = await httpclient.post('https://httpbun.com/post', jsonData, {
+            postType: httpclient.JSON // Specify the post type
+        });
+        results.post_json_test = JSON.parse(postJsonResponse.body);
+
+        // --- 3. POST Form URL Encoded Test ---
+        const formURLEncodedBody = { user: "sam", key: "abc-123" };
+        const postFormResponse = await httpclient.post('https://httpbun.com/post', formURLEncodedBody, {
+            postType: httpclient.FORM
+        });
+        results.post_form_test = JSON.parse(postFormResponse.body);
+
+        // --- 4. POST Plain Text Test ---
+        const textData = "This is a plain text body.";
+        const postTextResponse = await httpclient.post('https://httpbun.com/post', textData, {
+            postType: httpclient.TEXT
+        });
+        results.post_text_test = JSON.parse(postTextResponse.body);
+
+        // --- 5. GET Binary Data Test ---
+        const imageResponse = await httpclient.get('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/500px-Ghostscript_Tiger.svg.png');
+        results.get_image_test = {
+            status: imageResponse.status,
+            isBuffer: Buffer.isBuffer(imageResponse.body), // Should be true
+            contentType: imageResponse.headers['content-type'], // Should be 'image/png'
+            size: imageResponse.body.length,
+        };
+
+        // --- 6. POST Multipart Form Data Test ---
+        const form = formdata.create();
+        form.append('name', 'GingerJS App Server');
+        form.append('description', 'This is the GingerJS mascot.');
+        form.append('image', fs.readFileSync(fs.BOX, './images/ginger.png'), 'ginger.png');
+
+        const postFormDataResponse = await httpclient.post('https://httpbun.com/post', form, {
+            postType: httpclient.MULTIPART,
+            headers: form.getHeaders()
+        });
+        const responseJSON = JSON.parse(postFormDataResponse.body);
+        delete responseJSON.files.image.content; // Remove the actual file content for brevity
+        results.post_multipart_test = responseJSON;
+
+        $g.response.send(results);
+    });
+};
+```
+
+## Image
+Tests the 'image' module by loading a source image, applying transformations, and returning the result
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const fs = require('fs');
+        const image = require('image');
+
+        const sourceImagePath = './images/ginger.png';
+        const outputWebPath = 'generated/processed_image.webp';
+
+        // --- 1. Load the source image using our module's load function ---
+        // 'load' will use fs.readFileSync(fs.BOX, ...) under the hood.
+        const processor = image.loadFromFile(fs.BOX, sourceImagePath);
+
+        // --- 2. Perform a chain of manipulations ---
+        await processor
+            .resize({ width: 200, height: 200, fit: 'contain', background: '#FFFFFF' })
+            .greyscale()
+            .blur(1)
+            .format('webp', { quality: 80 })
+            // 3. Save the final image to the public WEB scope.
+            .toFile(fs.WEB, outputWebPath);
+
+        // --- 4. Verify the file was created and respond ---
+        if (!fs.existsSync(fs.WEB, outputWebPath)) {
+            throw new Error("Image processing failed to create the output file.");
+        }
+
+        const responseHtml = `
+            <h1>Image Processing Test Successful</h1>
+            <p>The original image at <b>./assets/ginger.png</b> was processed.</p>
+            <p>A 200x200, greyscale, blurred WebP version was saved to the public folder.</p>
+            <h2>Result:</h2>
+            <img src="${$g.request.protocol}://${$g.request.hostname}/tests/${outputWebPath}?t=${Date.now()}" alt="Processed Image">
+            <p><a href="${$g.request.protocol}://${$g.request.hostname}/tests/${outputWebPath}" target="_blank">View Image Directly</a></p>
+        `;
+
+        $g.response.send(responseHtml, 200, 'text/html');
+    });
+};
+```
+
+## JWT
+Tests the 'auth.jwt' functions for creating and verifying a JSON Web Token
+
+```javascript
+module.exports = async function() {
+    ginger(async function($g) {
+        const {jwt} = require('auth');
+        const result = {};
+
+        // --- 1. Create a JWT token ---
+        const payload = { userId: 42, role: 'admin' };
+        const token = jwt.create(payload);
+        result.token = token;
+
+        // --- 2. Verify the JWT token ---
+        const verifiedPayload = jwt.verify(token);
+        result.verified = verifiedPayload;
+
+        $g.response.send(result);
+    });
+};
+```
+
+## PDF
+Tests the 'pdf' module by generating a PDF with an embedded chart
+
+```javascript
+module.exports = async function () {
+    ginger(async ($g) => {
+        const pdf = require('pdf');
+        const chart = require('chart'); // We'll generate a chart to embed in the PDF
+
+        try {
+            // --- 1. Generate a chart image buffer to embed ---
+            const chartConfig = {
+                type: 'pie',
+                data: {
+                    labels: ['Organic', 'Direct', 'Referral'],
+                    datasets: [{ data: [550, 250, 200], backgroundColor: ['#3a86ff', '#ffbe0b', '#fb5607'] }]
+                }
+            };
+            const chartBuffer = await chart.render(chartConfig, { width: 300, height: 300 });
+            // Convert buffer to a base64 data URL for pdfmake
+            const chartImage = `data:image/png;base64,${chartBuffer.toString('base64')}`;
+
+            // --- 2. Define the PDF Document ---
+            const docDefinition = {
+                pageSize: 'LETTER',
+                pageMargins: [40, 60, 40, 60],
+                header: { text: 'GingerJS Weekly Report', alignment: 'center', margin: [0, 20, 0, 0] },
+                footer: function (currentPage, pageCount) { return { text: `Page ${currentPage} of ${pageCount}`, alignment: 'center' }; },
+
+                content: [
+                    { text: 'Dashboard Overview', style: 'header' },
+                    'This report shows a summary of key metrics for the past week.',
+
+                    // This table creates our grid layout
+                    {
+                        style: 'tableExample',
+                        table: {
+                            widths: ['*', 'auto'], // '*' means take remaining space, 'auto' fits content
+                            body: [
+                                // First Row
+                                [
+                                    {
+                                        stack: [ // 'stack' lets you put multiple items in a cell
+                                            { text: 'User Engagement', style: 'subheader' },
+                                            'User engagement has seen a 15% increase week-over-week. This is a very long line of text to demonstrate how the content will automatically wrap and cause the row height to expand. All other cells in this row will automatically adjust their height to match, ensuring the layout remains aligned.'
+                                        ]
+                                    },
+                                    {
+                                        image: chartImage,
+                                        width: 250 // Control image size inside the cell
+                                    }
+                                ],
+                                // Second Row
+                                [
+                                    {
+                                        text: 'This is a simple text cell in the second row. Its height is determined by the content.'
+                                    },
+                                    {
+                                        text: 'This cell is aligned with the one on the left.'
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: 'lightHorizontalLines' // Optional: add some styling to the table
+                    }
+                ],
+
+                styles: {
+                    header: { fontSize: 22, bold: true, margin: [0, 0, 0, 10] },
+                    subheader: { fontSize: 16, bold: true, margin: [0, 10, 0, 5] },
+                    tableExample: { margin: [0, 5, 0, 15] },
+                }
+            };
+
+            // --- 3. Generate the PDF buffer ---
+            const pdfBuffer = await pdf.create(docDefinition);
+
+            // --- 4. Send the PDF back to the browser ---
+            const fileName = `report-${Date.now()}.pdf`;
+            $g.response.headers['Content-Disposition'] = `attachment; filename="${fileName}"`;
+            $g.response.send(pdfBuffer, 200, 'application/pdf');
+
+        } catch (err) {
+            $g.log.error('Error in pdf_test script:', { error: err.message, stack: err.stack });
+            $g.response.send({ error: 'Internal Server Error', message: err.message }, 500);
+        }
+    });
+};
+```
+
+## QR and Barcode
+Tests the generation of both a QR code and a 1D barcode
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const qrcode = require('qrcode');
+
+        const qrText = 'https://github.com/google/gemini-api';
+        const qrcodeText = '123456789012';
+
+        // --- 1. Generate QR Code as a Data URL ---
+        const qrCodeDataUrl = await qrcode.qrcode(qrText, {
+            output: qrcode.DATA_URL,
+            width: 250,
+            margin: 2
+        });
+
+        // --- 2. Generate qrcode as a Data URL ---
+        const qrcodeDataUrl = await qrcode.barcode('EAN13', qrcodeText, {
+            output: qrcode.DATA_URL
+        });
+
+        // --- 3. Generate a QR Code as a Buffer (to show the other option works) ---
+        const qrBuffer = await qrcode.qrcode('Test Buffer Output');
+
+
+        // --- 4. Send an HTML response to display the images ---
+        const htmlResponse = `
+            <!DOCTYPE html>
+            <html>
+            <head><title>qrcode Test</title></head>
+            <body style="font-family: sans-serif; text-align: center;">
+                <h1>qrcode and QR Code Generation Test</h1>
+                
+                <h2>QR Code (Generated as Data URL)</h2>
+                <p>Encodes: "${qrText}"</p>
+                <img src="${qrCodeDataUrl}" alt="QR Code">
+                
+                <hr style="margin: 2rem 0;">
+
+                <h2>qrcode (EAN-13, Generated as Data URL)</h2>
+                <p>Encodes: "${qrcodeText}"</p>
+                <img src="${qrcodeDataUrl}" alt="qrcode">
+                
+                <hr style="margin: 2rem 0;">
+                
+                <h2>Buffer Test</h2>
+                <p>A QR code was also generated as a buffer in the background.</p>
+                <p>Buffer length: ${qrBuffer.length} bytes.</p>
+            </body>
+            </html>
+            `;
+
+        $g.response.send(htmlResponse, 200, 'text/html');
     });
 };
 ```
