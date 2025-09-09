@@ -36,6 +36,10 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 | | [JWT](#jwt) | Tests the 'auth.jwt' functions for creating and verifying a JSON Web Token. |
 | | [PDF](#pdf) | Tests the 'pdf' module by generating a PDF with an embedded chart. |
 | | [QR / Barcode](#qr-and-barcode) | Tests the generation of both a QR code and a 1D barcode. |
+| | [RND Utils](#rnd-utils) | Tests the 'rnd' utility namespace for generating random data. |
+| | [Misc. Utils](#misc-utils) | Tests the 'string', 'validate', and 'misc' utility namespaces. |
+| | [UUID](#uuid) | Tests the generation and validation of v4 UUID. |
+| | [Zip](#zip) | Performs a full lifecycle test of the 'zip' module, including creating and unzipping archives. |
 
 
 ---
@@ -1487,14 +1491,201 @@ module.exports = async function () {
 };
 ```
 
-## Using app specfic modules
-Tests the sandboxed `require()` of a local library
+## RND Utils
+Tests the 'rnd' utility namespace for generating random data
 
 ```javascript
-module.exports = async function() {
-    await ginger(function($g) {
-        const {add} = require('./libs/sample-lib.js');
-        $g.response.send("Lib call result: " + add(5, 10));
+module.exports = async function () {
+    ginger(async function ($g) {
+        const { rnd } = require('utils');
+        const testArray = ['apple', 'banana', 'cherry', 'date', 'elderberry'];
+
+        const result = {
+            numeric: {
+                "int(10)": rnd.int(10),
+                "float(10)": rnd.float(10),
+                "intInRange(50, 100)": rnd.intInRange(50, 100),
+                "floatInRange(50, 100)": rnd.floatInRange(50, 100),
+            },
+            boolean: {
+                "bool()": rnd.bool(),
+                "another bool()": rnd.bool(),
+            },
+            array: {
+                original_array: testArray.join(', '),
+                "choice(array)": rnd.choice(testArray),
+                // Note: shuffle modifies the array in place, so we pass a copy to preserve the original for display.
+                "shuffle(array)": rnd.shuffle([...testArray]),
+            },
+            visual: {
+                "color()": rnd.color(),
+                "another color()": rnd.color(),
+            },
+            string: {
+                "short": rnd.string(6),
+                "long": rnd.string(12),
+            }
+        };
+
+        $g.response.send(result);
+    });
+};
+```
+
+## Utils
+Tests the 'string', 'validate', and 'misc' utility namespaces
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const { string, validate, misc } = require('utils');
+        const dataForGrouping = [
+            { category: 'fruit', name: 'apple' },
+            { category: 'veg', name: 'carrot' },
+            { category: 'fruit', name: 'banana' },
+        ];
+        const dataForInValidate = ['admin', 'editor', 'viewer'];
+
+        const results = {
+            // --- STRING TESTS ---
+            string_tests: {
+                "capitalize('hello there')": string.capitalize('hello there'),
+                "slugify(' This is a -- Slug! ')": string.slugify(' This is a -- Slug! '),
+                "truncate('long text that needs shortening', 20)": string.truncate('long text that needs shortening', 20),
+                "stripHtml('<p><b>HTML</b> content</p>')": string.stripHtml('<p><b>HTML</b> content</p>'),
+            },
+
+            // --- VALIDATE TESTS ---
+            validate_tests: {
+                "isEmail('test@example.com')": validate.isEmail('test@example.com'),
+                "isEmail('invalid-email')": validate.isEmail('invalid-email'),
+                "isUrl('https://google.com')": validate.isUrl('https://google.com'),
+                "isUrl('not a url')": validate.isUrl('not a url'),
+                "isEmpty('')": validate.isEmpty(''),
+                "isEmpty([])": validate.isEmpty([]),
+                "isEmpty({})": validate.isEmpty({}),
+                "isEmpty('  ')": validate.isEmpty('  '),
+                "isEmpty('hello')": validate.isEmpty('hello'),
+                "isPhoneNumber('+1 (555) 123-4567')": validate.isPhoneNumber('+1 (555) 123-4567'),
+                "isPhoneNumber('5551234567')": validate.isPhoneNumber('5551234567'),
+                "isPhoneNumber('abc')": validate.isPhoneNumber('abc'),
+
+                "isInteger(10)": validate.isInteger(10),
+                "isInteger(10.5)": validate.isInteger(10.5),
+                "isInteger('10')": validate.isInteger('10'),
+
+                "isInRange(5, 1, 10)": validate.isInRange(5, 1, 10),
+                "isInRange(11, 1, 10)": validate.isInRange(11, 1, 10),
+
+                "hasLength('abc', { exact: 3 })": validate.hasLength('abc', { exact: 3 }),
+                "hasLength('abcd', { exact: 3 })": validate.hasLength('abcd', { exact: 3 }),
+                "hasLength('password', { min: 8 })": validate.hasLength('password', { min: 8 }),
+                "hasLength('pass', { min: 8 })": validate.hasLength('pass', { min: 8 }),
+                "hasLength('comment', { max: 10 })": validate.hasLength('comment', { max: 10 }),
+                "hasLength('long comment', { max: 10 })": validate.hasLength('long comment', { max: 10 }),
+
+                "isAlphanumeric('user123')": validate.isAlphanumeric('user123'),
+                "isAlphanumeric('user-123')": validate.isAlphanumeric('user-123'),
+
+                "isIn('admin', roles)": validate.isIn('admin', dataForInValidate),
+                "isIn('guest', roles)": validate.isIn('guest', dataForInValidate),
+            },
+
+            // --- MISC TESTS ---
+            misc_tests: {
+                "clamp(150, 0, 100)": misc.clamp(150, 0, 100),
+                "clamp(-10, 0, 100)": misc.clamp(-10, 0, 100),
+                "clamp(50, 0, 100)": misc.clamp(50, 0, 100),
+                "groupBy(data, 'category')": misc.groupBy(dataForGrouping, 'category'),
+            }
+        };
+
+        $g.response.send(results);
+    });
+};
+```
+
+## UUID
+Tests the generation and validation of v4 UUID
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const uuid = require('uuid');
+        const results = {
+            // --- UUID TESTS ---
+            uuid_tests: {
+                "v4()": uuid.v4(),
+                "validate(v4())": uuid.validate(uuid.v4()),
+                "validate('invalid-uuid')": uuid.validate('invalid-uuid'),
+            }
+        };
+        $g.response.send(results);
+    });
+};
+```
+
+## Zip
+Performs a full lifecycle test of the 'zip' module, including creating and unzipping archives
+
+```javascript
+module.exports = async function () {
+    ginger(async function ($g) {
+        const fs = require('fs');
+        const zip = require('zip');
+
+        const results = [];
+
+        const sourceDir = 'zip_source';
+        const zipDefaultPath = 'temp/archive_default.zip';
+        const zipWithRootPath = 'temp/archive_with_root.zip';
+        const unzipDefaultDir = 'zip_unpacked_default';
+        const unzipWithRootDir = 'zip_unpacked_with_root';
+        const crossOriginZipPath = 'cross_origin_archive.zip';
+
+        // --- 0. Cleanup ---
+        for (const dir of [sourceDir, 'temp', unzipDefaultDir, unzipWithRootDir]) {
+            if (fs.existsSync(fs.BOX, dir)) await fs.rmdir(fs.BOX, dir, { recursive: true });
+        }
+        await fs.rmdir(fs.WEB, 'temp', { recursive: true });
+        results.push("0. Cleaned up old directories.");
+
+        // --- 1. Create source directory ---
+        await fs.writeFile(fs.BOX, `${sourceDir}/file1.txt`, 'hello');
+        await fs.writeFile(fs.BOX, `${sourceDir}/subdir/file2.txt`, 'world');
+        results.push(`1. Created source directory '${sourceDir}'.`);
+
+        await fs.mkdir(fs.BOX, 'temp');
+        results.push("1a. Created temporary directory for zips.");
+
+        // --- 2. Test zipToFile (default - contents only) ---
+        await zip.zipToFile(fs.BOX, sourceDir, fs.BOX, zipDefaultPath);
+        await zip.unzip(fs.BOX, zipDefaultPath, fs.BOX, unzipDefaultDir);
+
+        // Check for a file at the root of the unzipped folder
+        if (!fs.existsSync(fs.BOX, `${unzipDefaultDir}/file1.txt`)) {
+            throw new Error("Default zip (contents only) failed. Root file missing.");
+        }
+        results.push("2. PASS: Successfully zipped directory contents (default).");
+
+        // --- 3. Test zipToFile (includeRootFolder: true) ---
+        await zip.zipToFile(fs.BOX, sourceDir, fs.BOX, zipWithRootPath, { includeRootFolder: true });
+        await zip.unzip(fs.BOX, zipWithRootPath, fs.BOX, unzipWithRootDir);
+
+        // Now, the files should be inside a folder named 'zip_source'
+        const expectedPath = `${unzipWithRootDir}/${sourceDir}/subdir/file2.txt`;
+        if (!fs.existsSync(fs.BOX, expectedPath)) {
+            throw new Error("Zipping with root folder failed. Nested file missing.");
+        }
+        results.push("3. PASS: Successfully zipped directory including the root folder.");
+
+        // --- 4. Test zip to buffer (includeRootFolder: true) ---
+        const buffer = await zip.zip(fs.BOX, sourceDir, { includeRootFolder: true });
+        results.push(`4. PASS: Zipped to buffer with root folder (size: ${buffer.length} bytes).`);
+
+        results.push("SUCCESS: All zip options completed successfully.");
+
+        $g.response.send(results);
     });
 };
 ```
