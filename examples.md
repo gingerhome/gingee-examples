@@ -1532,7 +1532,7 @@ module.exports = async function () {
 };
 ```
 
-## Utils
+## Misc Utils
 Tests the 'string', 'validate', and 'misc' utility namespaces
 
 ```javascript
