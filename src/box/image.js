@@ -1,9 +1,9 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
         const image = require('image');
 
-        const sourceImagePath = './images/ginger.png';
+        const sourceImagePath = './images/gingee.png';
         const outputWebPath = 'generated/processed_image.webp';
 
         // --- 1. Load the source image using our module's load function ---
@@ -26,7 +26,7 @@ module.exports = async function () {
 
         const responseHtml = `
             <h1>Image Processing Test Successful</h1>
-            <p>The original image at <b>./assets/ginger.png</b> was processed.</p>
+            <p>The original image at <b>./assets/gingee.png</b> was processed.</p>
             <p>A 200x200, greyscale, blurred WebP version was saved to the public folder.</p>
             <h2>Result:</h2>
             <img src="${$g.request.protocol}://${$g.request.hostname}/tests/${outputWebPath}?t=${Date.now()}" alt="Processed Image">

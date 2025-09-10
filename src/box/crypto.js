@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const crypto = require('crypto');
 
         const input = "hello world";

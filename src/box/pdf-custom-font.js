@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async ($g) => {
+    gingee(async ($g) => {
         const pdf = require('pdf');
         const chart = require('chart'); // We'll generate a chart to embed in the PDF
 
@@ -31,7 +31,7 @@ module.exports = async function () {
                 },
                 pageSize: 'LETTER',
                 pageMargins: [40, 60, 40, 60],
-                header: { text: 'GingerJS Weekly Report', alignment: 'center', margin: [0, 20, 0, 0] },
+                header: { text: 'Gingee Weekly Report', alignment: 'center', margin: [0, 20, 0, 0] },
                 footer: function (currentPage, pageCount) { return { text: `Page ${currentPage} of ${pageCount}`, alignment: 'center' }; },
 
                 content: [

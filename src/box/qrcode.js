@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const qrcode = require('qrcode');
 
         const qrText = 'https://github.com/google/gemini-api';

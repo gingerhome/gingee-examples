@@ -1,5 +1,5 @@
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         // usually you would do something useful here like 
         // creating or migrating db schema used by the app
         // warming up the app cache

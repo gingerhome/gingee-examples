@@ -1,10 +1,10 @@
 module.exports = async function() {
-    ginger(async ($g) => {
+    gingee(async ($g) => {
         const cache = require('cache');
 
         const results = [];
         //1. Test cache set operation
-        await cache.set('secret_key', { message: 'This is from GingerJS tests app' });
+        await cache.set('secret_key', { message: 'This is from Gingee tests app' });
         results.push('1. PASS: Cache set operation successful for key "secret_key"');
 
         //2. Test cache get operation

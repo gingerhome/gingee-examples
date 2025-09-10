@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const { string, validate, misc } = require('utils');
         const dataForGrouping = [
             { category: 'fruit', name: 'apple' },

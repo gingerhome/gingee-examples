@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const httpclient = require('httpclient');
         const formdata = require('formdata');
         const fs = require('fs');
@@ -43,9 +43,9 @@ module.exports = async function () {
 
         // --- 6. POST Multipart Form Data Test ---
         const form = formdata.create();
-        form.append('name', 'GingerJS App Server');
-        form.append('description', 'This is the GingerJS mascot.');
-        form.append('image', fs.readFileSync(fs.BOX, './images/ginger.png'), 'ginger.png');
+        form.append('name', 'Gingee App Server');
+        form.append('description', 'This is the Gingee mascot.');
+        form.append('image', fs.readFileSync(fs.BOX, './images/gingee.png'), 'gingee.png');
 
         const postFormDataResponse = await httpclient.post('https://httpbun.com/post', form, {
             postType: httpclient.MULTIPART,

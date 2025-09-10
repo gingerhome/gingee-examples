@@ -1,5 +1,5 @@
 module.exports = async function() {
-    ginger(function($g) {
+    gingee(function($g) {
         var fs = require('fs');
         
         var htmlContent = fs.readFileSync(fs.BOX, 'assets/testcookies.html');

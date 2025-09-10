@@ -1,5 +1,5 @@
 module.exports = async function() {
-    ginger(function($g) {
+    gingee(function($g) {
         var resp = {
             code: 200,
             body: $g.request.body

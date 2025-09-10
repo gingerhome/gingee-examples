@@ -1,5 +1,5 @@
 module.exports = function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const tinycolor = require('./libs/external/tinycolor.min.js');  //https://github.com/bgrins/TinyColor
         const mathjs = require('./libs/external/math.min.js');  //https://mathjs.org/
         const lodash = require('./libs/external/lodash.min.js');  //https://lodash.com/
@@ -30,7 +30,7 @@ module.exports = function () {
 
         const hbs = handlebars.create();
         const template = hbs.compile("Hello, {{name}}!");
-        const hbsTest = template({ name: "GingerJS" });
+        const hbsTest = template({ name: "Gingee" });
 
         const vocaTest = {
             camelCase: voca.camelCase("hello world"),
@@ -72,7 +72,7 @@ module.exports = function () {
             set: immutable.Set([1, 2, 3])
         };
 
-        const mustacheTest = mustache.default.render("Hello, {{name}}!", { name: "GingerJS" });
+        const mustacheTest = mustache.default.render("Hello, {{name}}!", { name: "Gingee" });
         
         const responseObject = {
             tinycolor: tcTest,

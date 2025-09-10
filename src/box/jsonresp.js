@@ -1,5 +1,5 @@
 module.exports = async function() {
-    ginger(function($g) {
+    gingee(function($g) {
         $g.response.send({ message: "Hello world!" });
     });
 };

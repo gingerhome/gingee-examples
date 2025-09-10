@@ -1,5 +1,5 @@
 module.exports = async function() {
-    await ginger(async ($g) => {
+    await gingee(async ($g) => {
         // We will NOT require the 'path' module here.
         const fs = require('fs');
 

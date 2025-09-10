@@ -1,5 +1,5 @@
 module.exports = async function() {
-    ginger(function($g) {
+    gingee(function($g) {
         try{
             $g.response.send($g.utils.sayHello());
         } catch (error) {

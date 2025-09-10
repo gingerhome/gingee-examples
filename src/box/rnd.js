@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const { rnd } = require('utils');
         const testArray = ['apple', 'banana', 'cherry', 'date', 'elderberry'];
 

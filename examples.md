@@ -1,6 +1,6 @@
-# GingerJS API Usage Examples
+# Gingee API Usage Examples
 
-This guide contains a list of code examples on using the varied GingerJS API modules. Click [here](https://gingerhome.github.io/gingerjs-docs/) conceptual details on GingerJS . Click [here](https://gingerhome.github.io/gingerjs-docs/docs/server-script.html) for the server script guide in GingerJS.
+This guide contains a list of code examples on using the varied Gingee API modules. Click [here](https://gingerhome.github.io/gingee-docs/) conceptual details on Gingee . Click [here](https://gingerhome.github.io/gingee-docs/docs/server-script.html) for the server script guide in Gingee.
 
 | Category | Example | Description |
 | :-- | :-- | :-- |
@@ -20,7 +20,7 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 | **Using Modules** | | |
 | | [App specific modules](#using-app-specfic-modules) | Tests the sandboxed `require()` of a local library |
 | | [External modules](#using-external-modules) | Tests the sandboxed execution of various UMD-formatted external libraries |
-| **GingerJS Modules** | | |
+| **Gingee Modules** | | |
 | | [Cache](#cache) | Performs a full set, get, delete, and clear cycle on the app's namespaced cache. |
 | | [Chart](#chart) | Tests the 'chart' module by generating a PNG bar chart on the server. |
 | | [Crypto](#crypto) | Runs a comprehensive test of the 'crypto' module, including hashing, HMAC, encryption/decryption, and password functions. |
@@ -45,11 +45,11 @@ This guide contains a list of code examples on using the varied GingerJS API mod
 ---
 
 ## Hello World
-Tests a basic server script that returns a plain text response. This is the simplest possible GingerJS endpoint.
+Tests a basic server script that returns a plain text response. This is the simplest possible Gingee endpoint.
 
 ```javascript
 module.exports = async function() {
-    await ginger(async function($g) {
+    await gingee(async function($g) {
         $g.response.send("Hello, World!");
     });
 };
@@ -60,7 +60,7 @@ Tests a basic server script that returns a JSON object.
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         $g.response.send({ message: "Hello world!" });
     });
 };
@@ -71,11 +71,11 @@ Tests sending a direct binary (image/png) response from a server script.
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         const fs = require('fs');
         const mimeTypes = require('mime-types');
 
-        const imagePath = "./images/ginger.png";
+        const imagePath = "./images/gingee.png";
         const imageData = fs.readFileSync(fs.BOX, imagePath);
         const contentType = mimeTypes.lookup(imagePath) || 'application/octet-stream';
         $g.response.send(imageData, 200, contentType);
@@ -90,7 +90,7 @@ Tests passing query parameters to a GET request. The script will echo back the p
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         var resp = {
             code: 200,
             query: $g.request.query
@@ -106,7 +106,7 @@ Tests manifest-based routing with dynamic URL parameters (/users/:userId).
 
 ```javascript
 module.exports = async function () {
-    await ginger(async ($g) => {
+    await gingee(async ($g) => {
         const userId = $g.request.params.userId;
         $g.response.send({ message: `DYNAMIC ROUTE TEST: Details for user ID: ${userId}` });
     });
@@ -118,7 +118,7 @@ Tests sending a JSON object in the request body. The script will parse and echo 
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         var resp = {
             code: 200,
             body: $g.request.body
@@ -134,7 +134,7 @@ Tests posting body data as 'application/x-www-form-urlencoded'. The script will 
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         var resp = {
             code: 200,
             body: $g.request.body
@@ -150,7 +150,7 @@ Tests a multipart/form-data request, including a file upload. The script will pa
 
 ```javascript
 module.exports = async function () {
-    await ginger(function ($g) {
+    await gingee(function ($g) {
         if ($g.request.body && $g.request.body.files) {
             var fileFields = Object.keys($g.request.body.files);
             fileFields.forEach(fileField => {
@@ -174,7 +174,7 @@ Tests reading and setting cookies. This test will display the cookies it receive
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         var fs = require('fs');
         
         var htmlContent = fs.readFileSync(fs.BOX, 'assets/testcookies.html');
@@ -199,7 +199,7 @@ Tests the '$g.app' context object by returning its contents.
 
 ```javascript
 module.exports = function() {
-    await ginger(async function($g) {
+    await gingee(async function($g) {
         $g.response.send($g.app);
     });
 };
@@ -211,7 +211,7 @@ Tests the sandboxed `require()` of a local library
 
 ```javascript
 module.exports = async function() {
-    await ginger(function($g) {
+    await gingee(function($g) {
         const {add} = require('./libs/sample-lib.js');
         $g.response.send("Lib call result: " + add(5, 10));
     });
@@ -223,7 +223,7 @@ Tests the sandboxed execution of various UMD-formatted external libraries
 
 ```javascript
 module.exports = function () {
-    await ginger(async function ($g) {
+    await gingee(async function ($g) {
         const tinycolor = require('./libs/external/tinycolor.min.js');  //https://github.com/bgrins/TinyColor
         const mathjs = require('./libs/external/math.min.js');  //https://mathjs.org/
         const lodash = require('./libs/external/lodash.min.js');  //https://lodash.com/
@@ -254,7 +254,7 @@ module.exports = function () {
 
         const hbs = handlebars.create();
         const template = hbs.compile("Hello, {{name}}!");
-        const hbsTest = template({ name: "GingerJS" });
+        const hbsTest = template({ name: "Gingee" });
 
         const vocaTest = {
             camelCase: voca.camelCase("hello world"),
@@ -296,7 +296,7 @@ module.exports = function () {
             set: immutable.Set([1, 2, 3])
         };
 
-        const mustacheTest = mustache.default.render("Hello, {{name}}!", { name: "GingerJS" });
+        const mustacheTest = mustache.default.render("Hello, {{name}}!", { name: "Gingee" });
         
         const responseObject = {
             tinycolor: tcTest,
@@ -323,12 +323,12 @@ Performs a full set, get, delete, and clear cycle on the app's namespaced cache.
 
 ```javascript
 module.exports = async function() {
-    ginger(async ($g) => {
+    gingee(async ($g) => {
         const cache = require('cache');
 
         const results = [];
         //1. Test cache set operation
-        await cache.set('secret_key', { message: 'This is from GingerJS tests app' });
+        await cache.set('secret_key', { message: 'This is from Gingee tests app' });
         results.push('1. PASS: Cache set operation successful for key "secret_key"');
 
         //2. Test cache get operation
@@ -373,7 +373,7 @@ Tests the 'chart' module by generating a PNG bar chart on the server
 
 ```javascript
 module.exports = async function () {
-    ginger(async ($g) => {
+    gingee(async ($g) => {
         const chart = require('chart');
 
         try {
@@ -442,7 +442,7 @@ Runs a comprehensive test of the 'crypto' module, including hashing, HMAC, encry
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const crypto = require('crypto');
 
         const input = "hello world";
@@ -518,7 +518,7 @@ Tests the 'dashboard' module by composing three different charts into a single P
 
 ```javascript
 module.exports = async function () {
-    ginger(async ($g) => {
+    gingee(async ($g) => {
         const dashboard = require('dashboard');
 
         try {
@@ -587,7 +587,7 @@ Performs a full CRUD and transaction rollback test against a PostgreSQL database
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const db = require('db');
         const uuid = require('uuid');
 
@@ -767,7 +767,7 @@ Performs a full CRUD and transaction rollback test against a SQLite database fil
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const db = require('db');
         const uuid = require('uuid');
 
@@ -888,7 +888,7 @@ Tests all encoding and decoding functions (Base64, URI, Hex, HTML)
 
 ```javascript
 module.exports = function () {
-    ginger(function ($g) {
+    gingee(function ($g) {
         const encoder = require('encode');
 
         const originalText = "Hello, world! This is a test.";
@@ -905,7 +905,7 @@ module.exports = function () {
         const decodedJsonString = encoder.base64.decode(encodedObject);
         const decodedObject = JSON.parse(decodedJsonString);
 
-        const originalUrlParam = "node js & ginger tutorials?";
+        const originalUrlParam = "node js & gingee tutorials?";
         const encodedUrlParam = encoder.uri.encode(originalUrlParam);
         const decodedUrlParam = encoder.uri.decode(encodedUrlParam);
 
@@ -966,7 +966,7 @@ Performs a full async and sync lifecycle test (Write, Read, Copy, Move, Delete) 
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
 
         const originalPath = 'temp/original.txt';
@@ -1051,7 +1051,7 @@ Performs a full async and sync lifecycle test (MkDir, Copy, Move, RmDir) on a di
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
         const basePath = 'folder_tests';
         const originalDir = `${basePath}/original`;
@@ -1169,7 +1169,7 @@ Tests the 'html' module by parsing from a string, a local file, and scraping a l
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
         const html = require('html');
 
@@ -1214,7 +1214,7 @@ Tests the 'httpclient' module by making several live requests to an external API
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const httpclient = require('httpclient');
         const formdata = require('formdata');
         const fs = require('fs');
@@ -1258,9 +1258,9 @@ module.exports = async function () {
 
         // --- 6. POST Multipart Form Data Test ---
         const form = formdata.create();
-        form.append('name', 'GingerJS App Server');
-        form.append('description', 'This is the GingerJS mascot.');
-        form.append('image', fs.readFileSync(fs.BOX, './images/ginger.png'), 'ginger.png');
+        form.append('name', 'Gingee App Server');
+        form.append('description', 'This is the Gingee mascot.');
+        form.append('image', fs.readFileSync(fs.BOX, './images/gingee.png'), 'gingee.png');
 
         const postFormDataResponse = await httpclient.post('https://httpbun.com/post', form, {
             postType: httpclient.MULTIPART,
@@ -1280,11 +1280,11 @@ Tests the 'image' module by loading a source image, applying transformations, an
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
         const image = require('image');
 
-        const sourceImagePath = './images/ginger.png';
+        const sourceImagePath = './images/gingee.png';
         const outputWebPath = 'generated/processed_image.webp';
 
         // --- 1. Load the source image using our module's load function ---
@@ -1307,7 +1307,7 @@ module.exports = async function () {
 
         const responseHtml = `
             <h1>Image Processing Test Successful</h1>
-            <p>The original image at <b>./assets/ginger.png</b> was processed.</p>
+            <p>The original image at <b>./assets/gingee.png</b> was processed.</p>
             <p>A 200x200, greyscale, blurred WebP version was saved to the public folder.</p>
             <h2>Result:</h2>
             <img src="${$g.request.protocol}://${$g.request.hostname}/tests/${outputWebPath}?t=${Date.now()}" alt="Processed Image">
@@ -1324,7 +1324,7 @@ Tests the 'auth.jwt' functions for creating and verifying a JSON Web Token
 
 ```javascript
 module.exports = async function() {
-    ginger(async function($g) {
+    gingee(async function($g) {
         const {jwt} = require('auth');
         const result = {};
 
@@ -1347,7 +1347,7 @@ Tests the 'pdf' module by generating a PDF with an embedded chart
 
 ```javascript
 module.exports = async function () {
-    ginger(async ($g) => {
+    gingee(async ($g) => {
         const pdf = require('pdf');
         const chart = require('chart'); // We'll generate a chart to embed in the PDF
 
@@ -1368,7 +1368,7 @@ module.exports = async function () {
             const docDefinition = {
                 pageSize: 'LETTER',
                 pageMargins: [40, 60, 40, 60],
-                header: { text: 'GingerJS Weekly Report', alignment: 'center', margin: [0, 20, 0, 0] },
+                header: { text: 'Gingee Weekly Report', alignment: 'center', margin: [0, 20, 0, 0] },
                 footer: function (currentPage, pageCount) { return { text: `Page ${currentPage} of ${pageCount}`, alignment: 'center' }; },
 
                 content: [
@@ -1437,7 +1437,7 @@ Tests the generation of both a QR code and a 1D barcode
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const qrcode = require('qrcode');
 
         const qrText = 'https://github.com/google/gemini-api';
@@ -1496,7 +1496,7 @@ Tests the 'rnd' utility namespace for generating random data
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const { rnd } = require('utils');
         const testArray = ['apple', 'banana', 'cherry', 'date', 'elderberry'];
 
@@ -1537,7 +1537,7 @@ Tests the 'string', 'validate', and 'misc' utility namespaces
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const { string, validate, misc } = require('utils');
         const dataForGrouping = [
             { category: 'fruit', name: 'apple' },
@@ -1610,7 +1610,7 @@ Tests the generation and validation of v4 UUID
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const uuid = require('uuid');
         const results = {
             // --- UUID TESTS ---
@@ -1630,7 +1630,7 @@ Performs a full lifecycle test of the 'zip' module, including creating and unzip
 
 ```javascript
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
         const zip = require('zip');
 

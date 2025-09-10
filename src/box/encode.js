@@ -1,5 +1,5 @@
 module.exports = function () {
-    ginger(function ($g) {
+    gingee(function ($g) {
         const encoder = require('encode');
 
         const originalText = "Hello, world! This is a test.";
@@ -16,7 +16,7 @@ module.exports = function () {
         const decodedJsonString = encoder.base64.decode(encodedObject);
         const decodedObject = JSON.parse(decodedJsonString);
 
-        const originalUrlParam = "node js & ginger tutorials?";
+        const originalUrlParam = "node js & gingee tutorials?";
         const encodedUrlParam = encoder.uri.encode(originalUrlParam);
         const decodedUrlParam = encoder.uri.decode(encodedUrlParam);
 

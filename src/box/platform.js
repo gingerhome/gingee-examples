@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         //The tests app is not allowed to access the 'platform' module.
         //This should throw an error.
         const results = [];

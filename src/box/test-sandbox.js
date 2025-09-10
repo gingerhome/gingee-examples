@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const results = [];
 
         //1. Test gbox module access
@@ -10,12 +10,12 @@ module.exports = async function () {
             results.push("1. PASS: gbox module access denied: " + error.message);
         }
 
-        //2. Test ginger module access
+        //2. Test gingee module access
         try{
-            const gbox = require("ginger");
-            results.push("2. FAIL: ginger module access should be denied but was allowed.");
+            const gbox = require("gingee");
+            results.push("2. FAIL: gingee module access should be denied but was allowed.");
         }catch (error) {
-            results.push("2. PASS: ginger module access denied: " + error.message);
+            results.push("2. PASS: gingee module access denied: " + error.message);
         }
 
         //3. Test platform module access
@@ -43,15 +43,15 @@ module.exports = async function () {
             results.push("5. PASS: Access to __dirname denied: " + error.message);
         }
 
-        //6. Test path traversal to overwrite ginger.json
+        //6. Test path traversal to overwrite gingee.json
         try {
             const fs = require('fs');
-            const gingerJsonPath = '../../ginger.json'; // Attempt to traverse up and overwrite ginger.json
+            const gingeeJsonPath = '../../gingee.json'; // Attempt to traverse up and overwrite gingee.json
             // This should fail if path traversal is properly restricted
-            fs.writeFileSync(fs.WEB, gingerJsonPath, '{"test": "overwrite"}');
-            results.push("6. FAIL: Path traversal to overwrite ginger.json should be denied but was allowed.");
+            fs.writeFileSync(fs.WEB, gingeeJsonPath, '{"test": "overwrite"}');
+            results.push("6. FAIL: Path traversal to overwrite gingee.json should be denied but was allowed.");
         } catch (error) {
-            results.push("6. PASS: Path traversal to overwrite ginger.json denied: " + error.message);
+            results.push("6. PASS: Path traversal to overwrite gingee.json denied: " + error.message);
         }
 
         //7. Test restricted module access for cache_service

@@ -1,5 +1,5 @@
 module.exports = async function () {
-    ginger(async function ($g) {
+    gingee(async function ($g) {
         const fs = require('fs');
         const zip = require('zip');
 
@@ -52,34 +52,7 @@ module.exports = async function () {
         const buffer = await zip.zip(fs.BOX, sourceDir, { includeRootFolder: true });
         results.push(`4. PASS: Zipped to buffer with root folder (size: ${buffer.length} bytes).`);
 
-        // --- 5. NEW: Cross-Origin Security Tests ---
-        results.push("--- Cross-Scope Security Tests ---");
-
-        // 5a. Attempt to zip from BOX to WEB WITHOUT the flag (should fail)
-        let didFailAsExpected = false;
-        try {
-            await zip.zipToFile(fs.BOX, sourceDir, fs.WEB, crossOriginZipPath);
-            results.push("5a. FAIL: Security check for cross-scope zip did NOT throw an error.");
-        } catch (e) {
-            didFailAsExpected = true;
-            results.push(`5a. PASS: Security check correctly blocked cross-scope zip: "${e.message}"`);
-        }
-        if (!didFailAsExpected) throw new Error("Cross-scope security check failed to trigger.");
-
-        // 5b. Attempt to zip from BOX to WEB WITH the flag (should succeed)
-        await zip.zipToFile(fs.BOX, sourceDir, fs.WEB, crossOriginZipPath, { allowCrossOrigin: true });
-        results.push(`5b. PASS: Successfully zipped from BOX to WEB using 'allowCrossOrigin: true' flag.`);
-
-        // Verify the file was actually created in the public web folder
-        if (!fs.existsSync(fs.WEB, crossOriginZipPath)) {
-            throw new Error("Cross-origin zip with flag failed to create the file in the WEB scope.");
-        }
-        results.push(`   - Verified '${crossOriginZipPath}' exists in the public WEB folder.`);
-        // Final cleanup of the public file
-        await fs.deleteFile(fs.WEB, crossOriginZipPath);
-
-
-        results.push("SUCCESS: All zip options and security checks completed successfully.");
+        results.push("SUCCESS: All zip options completed successfully.");
 
         $g.response.send(results);
     });

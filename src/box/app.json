@@ -1,6 +1,6 @@
 {
-  "name": "Ginger JS Test Suite",
-  "description": "This is test suite for Ginger JS",
+  "name": "Gingee Test Suite",
+  "description": "This is test suite for Gingee",
   "version": "1.0.0",
   "db": [
     {
@@ -10,7 +10,7 @@
       "port": 5432,
       "user": "postgres",
       "password": "postgres",
-      "database": "gingertestdb",
+      "database": "gingeetestdb",
       "min": 2,
       "max": 10
     },
@@ -26,7 +26,7 @@
       "port": 3306,
       "user": "root",
       "password": "mysql",
-      "database": "gingertestdb",
+      "database": "gingeetestdb",
       "max": 10,
       "queueLimit": 0,
       "waitForConnections": true
@@ -41,7 +41,7 @@
   "env": {
     "MY_ENV_VAR": "app specific environment variable"
   },
-  "jwt_secret": "gingerjs_is_awesome",
+  "jwt_secret": "gingee_is_awesome",
   "cache": {
     "client": {
       "enabled": false,
