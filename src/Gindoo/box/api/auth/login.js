@@ -21,7 +21,7 @@ module.exports = async function() {
 
             // Create JWT and set it in a secure cookie
             const token = auth.jwt.create({ userId: user.id, email: user.email }, '7d'); // Token expires in 7 days
-            $g.response.cookies.gindoo_session = `${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
+            $g.response.cookies.gindoo_session = `${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
 
             // Return user object without the password hash
             const { password_hash, ...userResponse } = user;

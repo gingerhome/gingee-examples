@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Gindoo is a simple kanban style project management and collaboration tool.",
   "type": "SPA",
-  "mode": "development",
   "spa": {
     "enabled": true,
     "dev_server_proxy": "http://localhost:5173",

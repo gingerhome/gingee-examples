@@ -29,7 +29,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/gindoo/api/users/list');
+            const response = await fetch('/gindoo/api/users/list', { credentials: 'include' });
             if (!response.ok) throw new Error('Failed to fetch users');
             const data: User[] = await response.json();
             setUsers(data);
@@ -45,6 +45,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData), // The userData object is now the correct shape
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -62,6 +63,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await fetch(`/gindoo/api/users/${userId}`, { // Assuming a DELETE endpoint
                 method: 'DELETE',
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -81,7 +83,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             if (filters.assigneeId) {
                 params.append('assigneeId', filters.assigneeId);
             }
-            const response = await fetch(`/gindoo/api/tasks?${params.toString()}`);
+            const response = await fetch(`/gindoo/api/tasks?${params.toString()}`, { credentials: 'include' });
             if (!response.ok) throw new Error('Failed to fetch tasks');
             const data: Task[] = await response.json();
             setTasks(data);
@@ -105,6 +107,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -131,6 +134,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -148,6 +152,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await fetch(`/gindoo/api/tasks/${taskId}`, {
                 method: 'DELETE',
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();

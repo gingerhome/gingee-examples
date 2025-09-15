@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const checkUserSession = async () => {
             try {
-                const response = await fetch('/gindoo/api/auth/me');
+                const response = await fetch('/gindoo/api/auth/me', { credentials: 'include' });
                 if (response.ok) {
                     const userData: User = await response.json();
                     setUser(userData);
@@ -43,7 +43,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const response = await fetch('/gindoo/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password }),
+            credentials: 'include'
         });
 
         if (response.ok) {
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = async () => {
-        await fetch('/gindoo/api/auth/logout', { method: 'POST' });
+        await fetch('/gindoo/api/auth/logout', { method: 'POST', credentials: 'include' });
         setUser(null);
     };
 
@@ -67,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ currentPassword, newPassword }),
+                credentials: 'include'
             });
 
             const data = await response.json();

@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers['Authorization'] = `Bearer ${state.token}`;
         }
 
+        options.credentials = 'include'; // Always include credentials for session management
         const response = await fetch(`/gintin${url}`, { ...options, headers });
 
         if (response.status === 401) {

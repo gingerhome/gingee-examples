@@ -27,7 +27,7 @@ export const DashboardPage = () => {
     // Fetch leaderboard data
     useEffect(() => {
         setIsLoadingLeaderboard(true);
-        fetch('/gindoo/api/dashboard/leaderboard')
+        fetch('/gindoo/api/dashboard/leaderboard', { credentials: 'include' })
             .then(res => res.json())
             .then((data: LeaderboardEntry[]) => setLeaderboard(data))
             .catch(err => console.error("Failed to load leaderboard", err))

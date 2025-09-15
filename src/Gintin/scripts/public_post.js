@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} slug The post slug.
      */
     const fetchPost = async (slug) => {
-        const response = await fetch(`/gintin/api/public/posts/${slug}`);
+        const response = await fetch(`/gintin/api/public/posts/${slug}`, { credentials: 'include' });
         if (response.status === 404) {
             throw new Error('Post not found.');
         }
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} postId The ID of the post.
      */
     const fetchComments = async (postId) => {
-        const response = await fetch(`/gintin/api/public/posts/${postId}/comments`);
+        const response = await fetch(`/gintin/api/public/posts/${postId}/comments`, { credentials: 'include' });
         if (!response.ok) {
             throw new Error('Failed to load comments.');
         }
@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
+                credentials: 'include'
             });
 
             const result = await response.json();

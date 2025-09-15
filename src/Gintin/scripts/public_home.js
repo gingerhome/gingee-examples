@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadPosts = async () => {
         try {
-            const response = await fetch('/gintin/api/public/posts');
+            const response = await fetch('/gintin/api/public/posts', { credentials: 'include' });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
