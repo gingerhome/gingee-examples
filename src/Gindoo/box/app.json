@@ -1,0 +1,35 @@
+{
+  "name": "gindoo",
+  "version": "1.0.0",
+  "description": "Gindoo is a simple kanban style project management and collaboration tool.",
+  "type": "SPA",
+  "mode": "development",
+  "spa": {
+    "enabled": true,
+    "dev_server_proxy": "http://localhost:5173",
+    "build_path": "./dist",
+    "fallback_path": "index.html"
+  },
+  "db": [
+    {
+      "type": "sqlite",
+      "name": "main_db",
+      "database": "data/gindoo.db"
+    }
+  ],
+  "jwt_secret": "gindoo_secret_key_change_me",
+  "startup_scripts": [
+    "setup/01_schema.js",
+    "setup/02_seed_admin.js",
+    "setup/03_seed_sample_data.js"
+  ],
+  "default_include": [
+    "auth_middleware.js"
+  ],
+  "env": {
+    "default_admin": {
+      "email": "admin@gindoo.app",
+      "password": "password123"
+    }
+  }
+}

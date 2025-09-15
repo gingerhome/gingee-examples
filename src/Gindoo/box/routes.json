@@ -1,0 +1,22 @@
+{
+  "routes": [
+    { "path": "/api/auth/register", "method": "POST", "script": "api/auth/register.js" },
+    { "path": "/api/auth/login", "method": "POST", "script": "api/auth/login.js" },
+    { "path": "/api/auth/logout", "method": "POST", "script": "api/auth/logout.js" },
+    { "path": "/api/auth/me", "method": "GET", "script": "api/auth/me.js" },
+
+    { "path": "/api/users/list", "method": "GET", "script": "api/users/list.js" },
+    { "path": "/api/users/create", "method": "POST", "script": "api/users/create.js" },
+    { "path": "/api/users/me/password", "method": "PUT", "script": "api/users/change-password.js" },
+    { "path": "/api/users/:userId", "method": "DELETE", "script": "api/users/delete.js" },
+
+    { "path": "/api/tasks", "method": "GET", "script": "api/tasks/list.js" },
+    { "path": "/api/tasks", "method": "POST", "script": "api/tasks/create.js" },
+    { "path": "/api/tasks/:taskId", "method": "PUT", "script": "api/tasks/update.js" },
+    { "path": "/api/tasks/:taskId", "method": "DELETE", "script": "api/tasks/delete.js" },
+
+    { "path": "/api/dashboard/stats", "method": "GET", "script": "api/dashboard/stats.js" },
+    { "path": "/api/dashboard/tasks-by-assignee", "method": "GET", "script": "api/dashboard/tasks-by-assignee.js" },
+    { "path": "/api/dashboard/leaderboard", "method": "GET", "script": "api/dashboard/leaderboard.js" }
+  ]
+}

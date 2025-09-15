@@ -1,0 +1,20 @@
+{
+  "include": [
+    "box/**/*",
+    "dist/**/*"
+  ],
+  "exclude": [
+    "box/data",
+    "box/logs",
+    "src",
+    "node_modules",
+    ".gitignore",
+    "vite.config.js",
+    "tailwind.config.js",
+    "postcss.config.js",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "tsconfig.node.json"
+  ]
+}

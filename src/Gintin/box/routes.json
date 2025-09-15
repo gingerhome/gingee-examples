@@ -1,0 +1,89 @@
+{
+  "routes": [
+    {
+      "path": "/api/auth/login",
+      "method": "POST",
+      "script": "api/auth/login.js"
+    },
+    {
+      "path": "/api/posts",
+      "method": "GET",
+      "script": "api/posts/list.js"
+    },
+    {
+      "path": "/api/posts",
+      "method": "POST",
+      "script": "api/posts/create.js"
+    },
+    {
+      "path": "/api/posts/:postId",
+      "method": "GET",
+      "script": "api/posts/get.js"
+    },
+    {
+      "path": "/api/posts/:postId",
+      "method": "PUT",
+      "script": "api/posts/update.js"
+    },
+    {
+      "path": "/api/posts/:postId",
+      "method": "DELETE",
+      "script": "api/posts/delete.js"
+    },
+    {
+      "path": "/api/uploads/image",
+      "method": "POST",
+      "script": "api/uploads/image.js"
+    },
+    {
+      "path": "/api/comments/pending",
+      "method": "GET",
+      "script": "api/comments/list_pending.js"
+    },
+    {
+      "path": "/api/comments/:commentId/approve",
+      "method": "PUT",
+      "script": "api/comments/approve.js"
+    },
+    {
+      "path": "/api/comments/:commentId",
+      "method": "DELETE",
+      "script": "api/comments/delete.js"
+    },
+    {
+      "path": "/api/public/posts",
+      "method": "GET",
+      "script": "api/public/posts/list.js"
+    },
+    {
+      "path": "/api/public/posts/:slug",
+      "method": "GET",
+      "script": "api/public/posts/get_by_slug.js"
+    },
+    {
+      "path": "/api/public/posts/:postId/comments",
+      "method": "GET",
+      "script": "api/public/comments/list_by_post.js"
+    },
+    {
+      "path": "/api/public/posts/:postId/comments",
+      "method": "POST",
+      "script": "api/public/comments/create.js"
+    },
+    {
+      "path": "/api/users",
+      "method": "GET",
+      "script": "api/users/list.js"
+    },
+    {
+      "path": "/api/users",
+      "method": "POST",
+      "script": "api/users/create.js"
+    },
+    {
+      "path": "/api/users/:userId",
+      "method": "DELETE",
+      "script": "api/users/delete.js"
+    }
+  ]
+}

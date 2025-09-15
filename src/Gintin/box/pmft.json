@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "mandatory": [
+      "db",
+      "fs",
+      "image"
+    ],
+    "optional": []
+  }
+}

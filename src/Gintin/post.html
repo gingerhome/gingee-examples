@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Post... - Gintin</title>
+    <link href="/gintin/css/style.css" rel="stylesheet">
+    <style>
+        .prose a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-5xl">
+        <header class="mb-8">
+            <a href="/gintin/" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                Back to all posts
+            </a>
+        </header>
+
+        <!-- The main container for the post -->
+        <main id="post-content-container">
+            <!-- Full post content will be dynamically inserted here -->
+            <div class="text-center text-gray-500 py-16">Loading post...</div>
+        </main>
+
+        <!-- Comments section will have a narrower width for readability -->
+        <section id="comments-section" class="mt-16 max-w-3xl mx-auto">
+            <h3 class="text-2xl font-bold mb-6 border-b pb-2">Comments</h3>
+            <div id="comment-list">
+                <!-- Comments will be loaded here -->
+            </div>
+            
+            <!-- New Comment Form -->
+            <div class="mt-8">
+                <h4 class="text-xl font-semibold mb-4">Leave a Comment</h4>
+                <form id="comment-form" class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="mb-4">
+                        <label for="author_name" class="block text-gray-700 font-semibold mb-2">Your Name</label>
+                        <input type="text" id="author_name" name="author_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="content" class="block text-gray-700 font-semibold mb-2">Comment</label>
+                        <textarea id="content" name="content" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                        Submit Comment
+                    </button>
+                    <div id="comment-form-message" class="mt-4 text-sm"></div>
+                </form>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 text-gray-500">
+            <p>&copy; 2025 Gintin. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Add Marked.js for rendering Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/gintin/scripts/public_post.js"></script>
+</body>
+</html>

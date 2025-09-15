@@ -1,0 +1,22 @@
+{
+  "name": "gintin",
+  "version": "1.0.0",
+  "description": "A simple blogging platform built with Gingee",
+  "type": "MPA",
+  "db": [
+    {
+      "type": "sqlite",
+      "name": "gintin_db",
+      "database": "data/gintin.db"
+    }
+  ],
+  "startup_scripts": [
+    "setup/01_schema.js",
+    "setup/02_seed_admin.js",
+    "setup/03_seed_posts.js"
+  ],
+  "default_include": [
+    "middleware/auth_check.js"
+  ],
+  "jwt_secret": "96e6e30ce40a4d7db3a5d96fd83ffa55ee0a931c5099927e1edc6491993343c6"
+}

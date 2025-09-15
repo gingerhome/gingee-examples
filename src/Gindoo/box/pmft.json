@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "mandatory": [
+      "db",
+      "chart"
+    ],
+    "optional": []
+  }
+}

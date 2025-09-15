@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gintin - A Modern Blog</title>
+    <link href="/gintin/css/style.css" rel="stylesheet">
+</head>
+<body class="font-sans text-gray-800">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl">
+        
+        <!-- Simplified Header -->
+        <header class="mb-12 border-b pb-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-4xl font-bold text-gray-900 tracking-tight">Gintin</h1>
+                <a href="/gintin/admin.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                    Admin Panel
+                </a>
+            </div>
+        </header>
+
+        <!-- The <main> element is now the grid container -->
+        <main id="post-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Blog posts will be dynamically inserted here by JavaScript -->
+            <div class="md:col-span-2 lg:col-span-3 text-center text-gray-500 py-16">Loading posts...</div>
+        </main>
+
+        <footer class="text-center mt-16 text-gray-500">
+            <p>&copy; 2025 Gintin. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="/gintin/scripts/public_home.js"></script>
+</body>
+</html>
